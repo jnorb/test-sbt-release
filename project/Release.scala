@@ -132,7 +132,7 @@ object Release {
       removeReleaseBranch.value,
       // Push the merged feature branch
       ReleaseStateTransformations.setNextVersion,
-      ReleaseStateTransformations.commitNextVersion,
+      ReleaseStateTransformations.commitNextVersion//,
       //pushBranches.value
     )
   }
