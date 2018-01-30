@@ -1,6 +1,6 @@
-import sbt.Keys.{version, _}
+import sbt.Keys.version
 import sbt._
-import sbtrelease.{ReleaseStateTransformations, Vcs, Version}
+import sbtrelease.{ReleaseStateTransformations, Version}
 
 import scala.sys.process
 
