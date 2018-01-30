@@ -1,8 +1,6 @@
-import sbt.Keys.version
+import sbt.Keys.{version, _}
 import sbt._
-import sbtrelease.{ReleaseStateTransformations, Version}
-
-import scala.sys.process
+import sbtrelease.{ReleaseStateTransformations, Vcs, Version}
 
 object Release {
 
@@ -18,7 +16,7 @@ object Release {
     val releaseBranch = s"release/$releaseTargetVersion"
 
     ReleaseStep(action = { st =>
-      vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log
       st
     })
   }
@@ -31,7 +29,7 @@ object Release {
     val releaseBranch = s"release/$releaseTargetVersion"
 
     ReleaseStep(action = { st =>
-      vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log
       st
     })
   }
@@ -39,7 +37,7 @@ object Release {
   private val checkoutDevelop = Def.setting {
     val vcs = releaseVcs.value.get
     ReleaseStep(action = { st =>
-      vcs.cmd("checkout", "develop") !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("checkout", "develop") !! st.log
       st
     })
   }
@@ -47,7 +45,7 @@ object Release {
   private val checkoutMaster = Def.setting {
     val vcs = releaseVcs.value.get
     ReleaseStep(action = { st =>
-      vcs.cmd("checkout", "master") !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("checkout", "master") !! st.log
       st
     })
   }
@@ -56,9 +54,9 @@ object Release {
     val vcs = releaseVcs.value.get
 
     ReleaseStep(action = { st =>
-      vcs.cmd("push", gitRemote, "master") !! st.log.asInstanceOf[process.ProcessLogger]
-      vcs.cmd("push", gitRemote, "develop") !! st.log.asInstanceOf[process.ProcessLogger]
-      vcs.cmd("push", gitRemote, "--tags") !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("push", gitRemote, "master") !! st.log
+      vcs.cmd("push", gitRemote, "develop") !! st.log
+      vcs.cmd("push", gitRemote, "--tags") !! st.log
       st
     })
   }
@@ -72,7 +70,7 @@ object Release {
 
     ReleaseStep(
       action = { st =>
-        vcs.cmd("checkout", "-b", releaseBranch, "develop") !! st.log.asInstanceOf[process.ProcessLogger]
+        vcs.cmd("checkout", "-b", releaseBranch, "develop") !! st.log
         st
       })
   }
@@ -85,7 +83,7 @@ object Release {
     val releaseBranch = s"release/$releaseTargetVersion"
 
     ReleaseStep(action = { st =>
-      vcs.cmd("branch", "-D", releaseBranch) !! st.log.asInstanceOf[process.ProcessLogger]
+      vcs.cmd("branch", "-D", releaseBranch) !! st.log
 
       st
     })
