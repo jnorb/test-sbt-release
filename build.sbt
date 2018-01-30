@@ -17,5 +17,4 @@ releaseProcess := Seq[ReleaseStep](
   tagRelease,
   releaseStepCommandAndRemaining("publish"),
   setNextVersion,
-  commitNextVersion,
-  pushChanges)
+  commitNextVersion)
