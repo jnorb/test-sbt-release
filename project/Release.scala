@@ -1,6 +1,6 @@
-import sbt.Keys.{version, _}
+import sbt.Keys.version
 import sbt._
-import sbtrelease.{ReleaseStateTransformations, Vcs, Version}
+import sbtrelease.{ReleaseStateTransformations, Version}
 
 object Release {
 
@@ -133,14 +133,14 @@ object Release {
       // Push the merged feature branch
       ReleaseStateTransformations.setNextVersion,
       ReleaseStateTransformations.commitNextVersion,
-      pushBranches.value
+      //pushBranches.value
     )
   }
 
 
   val settings = Seq(
     releaseCommitMessage := s"Set version to ${(version in ThisBuild).value}",
-    releaseTagName := (version in ThisBuild).value,
+    releaseTagName := s"release-${(version in ThisBuild).value}",
     releaseProcess := releaseMaster.value
   )
 
