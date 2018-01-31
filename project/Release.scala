@@ -117,8 +117,7 @@ object Release {
 
   lazy val runIntegrationTest: ReleaseStep = ReleaseStep(
     action = { st: State =>
-        import sbt._
-        import sbt.Keys._
+        import sbt.Keys.{thisProjectRef, test}
 
         val extracted = Project.extract(st)
         val ref = extracted.get(thisProjectRef)
