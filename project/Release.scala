@@ -4,7 +4,7 @@ import sbtrelease.{ReleaseStateTransformations, Version}
 
 /**
   * Based on https://github.com/fagossa/sbt-release-test
-  * 
+  *
   */
 object Release {
 
@@ -12,12 +12,13 @@ object Release {
 
   private val gitRemote = "origin"
 
-  private val vcs = releaseVcs.value.get
-  private val rcVersion = releaseVersion.value(version.value)
-  private val releaseTargetVersion = versions.releaseTarget(rcVersion)
-  private val releaseBranch = s"release/$releaseTargetVersion"
-
   private val mergeReleaseOntoMaster = Def.setting {
+    val vcs = releaseVcs.value.get
+
+    val rcVersion = releaseVersion.value(version.value)
+    val releaseTargetVersion = versions.releaseTarget(rcVersion)
+    val releaseBranch = s"release/$releaseTargetVersion"
+
     ReleaseStep(action = { st =>
       vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log
       st
@@ -25,6 +26,12 @@ object Release {
   }
 
   private val mergeReleaseOntoDevelop = Def.setting {
+    val vcs = releaseVcs.value.get
+
+    val rcVersion = releaseVersion.value(version.value)
+    val releaseTargetVersion = versions.releaseTarget(rcVersion)
+    val releaseBranch = s"release/$releaseTargetVersion"
+
     ReleaseStep(action = { st =>
       vcs.cmd("merge", "--no-ff", releaseBranch) !! st.log
       st
@@ -32,6 +39,7 @@ object Release {
   }
 
   private val checkoutDevelop = Def.setting {
+    val vcs = releaseVcs.value.get
     ReleaseStep(action = { st =>
       vcs.cmd("checkout", "develop") !! st.log
       st
@@ -39,6 +47,7 @@ object Release {
   }
 
   private val checkoutMaster = Def.setting {
+    val vcs = releaseVcs.value.get
     ReleaseStep(action = { st =>
       vcs.cmd("checkout", "master") !! st.log
       st
@@ -46,6 +55,8 @@ object Release {
   }
 
   private val pushBranches = Def.setting {
+    val vcs = releaseVcs.value.get
+
     ReleaseStep(action = { st =>
       vcs.cmd("push", gitRemote, "master") !! st.log
       vcs.cmd("push", gitRemote, "develop") !! st.log
@@ -55,6 +66,12 @@ object Release {
   }
 
   val createReleaseBranch = Def.setting {
+    val vcs = releaseVcs.value.get
+
+    val rcVersion = releaseVersion.value(version.value)
+    val releaseTargetVersion = versions.releaseTarget(rcVersion)
+    val releaseBranch = s"release/$releaseTargetVersion"
+
     ReleaseStep(
       action = { st =>
         vcs.cmd("checkout", "-b", releaseBranch, "develop") !! st.log
@@ -63,6 +80,12 @@ object Release {
   }
 
   private val removeReleaseBranch = Def.setting {
+    val vcs = releaseVcs.value.get
+
+    val rcVersion = releaseVersion.value(version.value)
+    val releaseTargetVersion = versions.releaseTarget(rcVersion)
+    val releaseBranch = s"release/$releaseTargetVersion"
+
     ReleaseStep(action = { st =>
       vcs.cmd("branch", "-D", releaseBranch) !! st.log
       st
@@ -79,6 +102,7 @@ object Release {
 
   private object git {
     private def checkBranch(name: Def.Initialize[String]) = Def.setting {
+      val vcs = releaseVcs.value.get
       ReleaseStep(
         action = { st =>
           if (vcs.currentBranch != name.value)
