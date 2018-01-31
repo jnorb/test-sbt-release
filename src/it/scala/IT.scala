@@ -1,3 +1,5 @@
+import org.scalatest.{FlatSpec, Matchers}
+
 class IT extends FlatSpec with Matchers {
 
   "it" should "run an IT" in {

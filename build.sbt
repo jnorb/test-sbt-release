@@ -7,4 +7,4 @@ lazy val root = (project in file("."))
   .configs(IntegrationTest)
   .settings(Defaults.itSettings)
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
+libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "it,test"
