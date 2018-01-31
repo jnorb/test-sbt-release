@@ -115,6 +115,18 @@ object Release {
 
   }
 
+  lazy val runIntegrationTest: ReleaseStep = ReleaseStep(
+    action = { st: State =>
+        import sbt._
+        import sbt.Keys._
+
+        val extracted = Project.extract(st)
+        val ref = extracted.get(thisProjectRef)
+        extracted.runAggregated(test in IntegrationTest in ref, st)
+    },
+    enableCrossBuild = true
+  )
+
   private val releaseMaster = Def.setting {
     Seq[ReleaseStep](
       git.checkIsOnDevelop.value,
@@ -122,6 +134,7 @@ object Release {
       ReleaseStateTransformations.inquireVersions,
       ReleaseStateTransformations.runClean,
       ReleaseStateTransformations.runTest,
+      runIntegrationTest,
       // Create a release
       createReleaseBranch.value,
       ReleaseStateTransformations.setReleaseVersion,
